@@ -4,14 +4,16 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "none",
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NAli3107/MongoDB-Social-Networking-API.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nadira Ali",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/NAli3107/MongoDB-Social-Networking-API/issues"
