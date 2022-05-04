@@ -1,0 +1,23 @@
+{
+  "name": "mongodb-social-networking-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NAli3107/MongoDB-Social-Networking-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NAli3107/MongoDB-Social-Networking-API/issues"
+  },
+  "homepage": "https://github.com/NAli3107/MongoDB-Social-Networking-API#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
