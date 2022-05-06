@@ -3,7 +3,7 @@ const { User, Thought } = require("../models");
 module.exports = {
   getUsers(req, res) {
     User.find()
-      .then((users) => res.json(users))
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
   getSingleUser(req, res) {
@@ -11,14 +11,25 @@ module.exports = {
       .select("-__v")
       .then((user) =>
         !user
-          ? res.status(404).json({ message: "No user with that ID" })
+          ? res.status(404).json({ message: "No user found with this ID! Try again." })
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
   },
   createUser(req, res) {
     User.create(req.body)
-      .then((dbUserData) => res.json(dbUserData))
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
+  },
+  updateUser({ params, body }, res) {
+    User.findOneAndUpdate({ _id: params.id }, body, { new: true })
+      .then((user) => {
+        if (!user) {
+          res.status(404).json({ message: "No user found with this ID. Try again." });
+          return;
+        }
+        res.json(user);
+      })
+      .catch((err) => res.status(400).json(err));
   },
 };
