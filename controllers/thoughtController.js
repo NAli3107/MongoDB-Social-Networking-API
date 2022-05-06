@@ -36,4 +36,20 @@ module.exports = {
         res.status(500).json(err);
       });
   },
+  updateThought(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !video
+          ? res.status(404).json({ message: 'No thought found with this id! 😣 Try again.' })
+          : res.json(thought)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
 };
