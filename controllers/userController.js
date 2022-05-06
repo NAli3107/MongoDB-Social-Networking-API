@@ -11,7 +11,9 @@ module.exports = {
       .select("-__v")
       .then((user) =>
         !user
-          ? res.status(404).json({ message: "No user found with this ID! Try again." })
+          ? res
+              .status(404)
+              .json({ message: "No user found with this ID! Try again." })
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
@@ -25,7 +27,20 @@ module.exports = {
     User.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((user) => {
         if (!user) {
-          res.status(404).json({ message: "No user found with this ID. Try again." });
+          res
+            .status(404)
+            .json({ message: "No user found with this ID. Try again." });
+          return;
+        }
+        res.json(user);
+      })
+      .catch((err) => res.status(400).json(err));
+  },
+  deleteUser({ params }, res) {
+    User.findOneAndDelete({ _id: params.id })
+      .then((user) => {
+        if (!user) {
+          res.status(404).json({ message: "No user found with this ID! Try again." });
           return;
         }
         res.json(user);
