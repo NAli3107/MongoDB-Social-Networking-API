@@ -1,10 +1,15 @@
+const req = require("express/lib/request");
 const { User, Thought } = require("../models");
 
-module.exports = {
+const userQueries = {
   getUsers(req, res) {
     User.find()
+      .select("-__v")
       .then((user) => res.json(user))
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        res.status(500).json(err);
+        console.log(err);
+      });
   },
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
@@ -23,8 +28,12 @@ module.exports = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
-  updateUser({ params, body }, res) {
-    User.findOneAndUpdate({ _id: params.id }, body, { new: true })
+  updateUser(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { new: true }
+    )
       .then((user) => {
         if (!user) {
           res
@@ -36,11 +45,13 @@ module.exports = {
       })
       .catch((err) => res.status(400).json(err));
   },
-  deleteUser({ params }, res) {
-    User.findOneAndDelete({ _id: params.id })
+  deleteUser(req, res) {
+    User.findOneAndDelete({ _id: req.params.userId })
       .then((user) => {
         if (!user) {
-          res.status(404).json({ message: "No user found with this ID! 😣 Try again." });
+          res
+            .status(404)
+            .json({ message: "No user found with this ID! 😣 Try again." });
           return;
         }
         res.json(user);
@@ -48,3 +59,5 @@ module.exports = {
       .catch((err) => res.status(400).json(err));
   },
 };
+
+module.exports = userQueries;

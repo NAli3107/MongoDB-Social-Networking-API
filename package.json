@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/NAli3107/MongoDB-Social-Networking-API#readme",
   "dependencies": {
+    "dayjs": "^1.11.2",
     "express": "^4.18.1",
     "mongoose": "^6.3.2"
   },

@@ -12,19 +12,16 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      validate: {
-        validator: () => Promise.resolve(false),
-        message: "Email validation failed",
-      },
+      match:[/.+@.+\..+/]
     },
-    thoughts: {
+    thoughts: [{
       type: Schema.Types.ObjectId,
       ref: "Thought",
-    },
-    friends: {
+    }],
+    friends: [{
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
+    }],
   },
   {
     toJSON: {
