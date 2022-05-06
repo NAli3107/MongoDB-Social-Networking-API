@@ -72,21 +72,19 @@ module.exports = {
       )
       .then((user) =>
         !user
-          ? res
-              .status(404)
-              .json({
-                message:
-                  "Thought deleted 😁, but found no user with this ID 😩. Try again!",
-              })
+          ? res.status(404).json({
+              message:
+                "Thought deleted 😁, but found no user with this ID 😩. Try again!",
+            })
           : res.json({ message: "Thought successfully created! 🥳" })
       )
       .catch((err) => res.status(500).json(err));
   },
   addReaction(req, res) {
     Thought.findOneAndUpdate(
-      {_id: req.params.thoughtId},
-      {$addToSet: {reactions: req.body}},
-      {new: true}
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { new: true }
     )
       .then((thought) =>
         !thought
@@ -98,6 +96,22 @@ module.exports = {
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
-      })
-    }
+      });
+  },
+  removeReaction(req, res) {
+    Thought.findByIdAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({
+              message:
+                "Reaction deleted 😁, but found no user with this ID 😩. Try again!",
+            })
+          : res.json({ message: "Reaction successfully removed! 🥳" })
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
