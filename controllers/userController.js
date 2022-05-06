@@ -13,7 +13,7 @@ module.exports = {
         !user
           ? res
               .status(404)
-              .json({ message: "No user found with this ID! Try again." })
+              .json({ message: "No user found with this ID! 😣 Try again." })
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
@@ -29,7 +29,7 @@ module.exports = {
         if (!user) {
           res
             .status(404)
-            .json({ message: "No user found with this ID. Try again." });
+            .json({ message: "No user found with this ID. 😣 Try again." });
           return;
         }
         res.json(user);
@@ -40,7 +40,7 @@ module.exports = {
     User.findOneAndDelete({ _id: params.id })
       .then((user) => {
         if (!user) {
-          res.status(404).json({ message: "No user found with this ID! Try again." });
+          res.status(404).json({ message: "No user found with this ID! 😣 Try again." });
           return;
         }
         res.json(user);
