@@ -9,8 +9,10 @@ module.exports = {
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
       .then((thought) =>
-        !thoughts
-          ? res.status(404).json({ message: "No thought found with this ID! 😣 Try again." })
+        !thought
+          ? res
+              .status(404)
+              .json({ message: "No thought found with this ID! 😣 Try again." })
           : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
@@ -20,16 +22,17 @@ module.exports = {
       .then((thought) => {
         return User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $addToSet: { thought: thought._id } },
+          { $addToSet: { thoughts: thought._id } },
           { new: true }
         );
       })
       .then((user) =>
         !user
           ? res.status(404).json({
-              message: 'Thought created 😁, but found no user with this ID 😩. Try again!',
+              message:
+                "Thought created 😁, but found no user with this ID 😩. Try again!",
             })
-          : res.json('Created the thought 🥳')
+          : res.json("Thought successfully created! 🥳")
       )
       .catch((err) => {
         console.log(err);
@@ -43,13 +46,40 @@ module.exports = {
       { runValidators: true, new: true }
     )
       .then((thought) =>
-        !video
-          ? res.status(404).json({ message: 'No thought found with this id! 😣 Try again.' })
+        !thought
+          ? res
+              .status(404)
+              .json({ message: "No thought found with this id! 😣 Try again." })
           : res.json(thought)
       )
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
       });
+  },
+  deleteThought(req, res) {
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
+      .then((thought) =>
+        !thought
+          ? res
+              .status(404)
+              .json({ message: "No thought found with this id! 😣 Try again." })
+          : User.findOneAndUpdate(
+              { thoughts: req.params.thoughtId },
+              { $pull: { thoughts: req.params.thoughtId } },
+              { new: true }
+            )
+      )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({
+                message:
+                  "Thought created 😁, but found no user with this ID 😩. Try again!",
+              })
+          : res.json({ message: "Thought successfully created! 🥳" })
+      )
+      .catch((err) => res.status(500).json(err));
   },
 };
