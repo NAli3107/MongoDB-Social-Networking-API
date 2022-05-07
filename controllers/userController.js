@@ -58,6 +58,39 @@ const userQueries = {
       })
       .catch((err) => res.status(400).json(err));
   },
+  addFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.body } },
+      { new: true }
+    )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: "No user found with this id! 😣 Try again." })
+          : res.json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+  removeFriend(req, res) {
+    User.findByIdAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: { friendId: req.params.friendId } } },
+      { new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({
+              message: "No user with this ID 😩. Try again!",
+            })
+          : res.json({ message: "Friend successfully removed! 🥳" })
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
 
 module.exports = userQueries;
